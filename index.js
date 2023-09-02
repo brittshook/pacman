@@ -6,25 +6,32 @@ canvas.height = innerHeight;
 
 // Set up map + wall boundaries
 const map = [
-    ['-', '-', '-', '-', '-', '-', '-'],
-    ['-', ' ', ' ', ' ', ' ', ' ', '-'],
-    ['-', ' ', '-', ' ', '-', ' ', '-'],
-    ['-', ' ', ' ', ' ', ' ', ' ', '-'],
-    ['-', '-', '-', '-', '-', '-', '-'],
+    ['-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-'],
+    ['-', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '-'],
+    ['-', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '-'],
+    ['-', ' ', ' ', '-', '-', ' ', ' ', '-', '-', ' ', ' ', '-'],
+    ['-', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '-'],
+    ['-', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '-'],
+    ['-', ' ', ' ', '-', '-', ' ', ' ', '-', '-', ' ', ' ', '-'],
+    ['-', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '-'],
+    ['-', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '-'],
+    ['-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-'],
 ];
 
 class Wall {
-    static width = 40;
-    static height = 40;
-    constructor({position}) {
+    static width = 20;
+    static height = 20;
+    constructor({ position }) {
         this.position = position;
         this.width = Wall.width;
         this.height = Wall.height;
+        // this.image = image;
     }
 
     draw() {
         context.fillStyle = '#0004ff';
         context.fillRect(this.position.x, this.position.y, this.width, this.height);
+        // context.drawImage(this.image, this.position.x, this.position.y);
     }
 }
 
@@ -68,11 +75,11 @@ class Pac {
         this.position.y += this.velocity.y;
     }
 }
-
+console.log(Wall.height);
 const pac = new Pac({
     position: {
-        x: Wall.width * 1.5,
-        y: Wall.height * 1.5
+        x: 2 * Wall.width,
+        y: 2 * Wall.height
     }, 
     velocity: {
         x: 0,
