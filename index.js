@@ -247,8 +247,8 @@ function detectCollision() {
 function animate() {
     requestAnimationFrame(animate);
     context.clearRect(0, 0, canvas.width, canvas.height); // clear canvas in between frames
-    pac.render(); 
     movePac();
+    pac.render(); 
     renderWalls(map);
     detectCollision();
 }
