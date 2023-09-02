@@ -135,101 +135,79 @@ function wallCollision({ player, object }) {
 const stopY = () => pac.velocity.y = 0;
 const stopX = () => pac.velocity.x = 0;
 
-// issue in this logic
-function handleCollisionAndMovement(direction) {
-    switch (direction) {
-        case 'up':
-            for (const wall of walls) {
-                if (wallCollision({
-                player: {
-                    ...pac,
-                    velocity: {
-                        x: 0,
-                        y: -5
-                    }
-                }, 
-                object: wall
-            })) {
-                    stopY();
-                    break;
-                } else {
-                    pac.velocity.y = -5;
-                }
-            }
-            break;
-        case 'down':
-            for (const wall of walls) {
-                if (wallCollision({
-                player: {
-                    ...pac,
-                    velocity: {
-                        x: 0,
-                        y: 5
-                    }
-                }, 
-                object: wall
-            })) {
-                    stopY();
-                    break;
-                } else {
-                    pac.velocity.y = 5;
-                }
-            }
-            break;
-        case 'left':
-            for (const wall of walls) {
-                if (wallCollision({
-                player: {
-                    ...pac,
-                    velocity: {
-                        x: -5,
-                        y: 0
-                    }
-                }, 
-                object: wall
-            })) {
-                    stopX();
-                    break;
-                } else {
-                    pac.velocity.x = -5;
-                }
-            }
-            break;
-        case 'right':
-            for (const wall of walls) {
-                if (wallCollision({
-                player: {
-                    ...pac,
-                    velocity: {
-                        x: 5,
-                        y: 0
-                    }
-                }, 
-                object: wall
-            })) {
-                    stopX();
-                    break;
-                } else {
-                    pac.velocity.x = 5;
-                }
-            }
-            break;
-    }
-}
-
 function movePac() {
-      // default velocity is 0
-      stopY();
-      stopX();
-
     if (keys.ArrowUp.pressed && lastKey === 'ArrowUp') {
-        handleCollisionAndMovement('up');
+        for (const wall of walls) {
+            if (wallCollision({
+            player: {
+                ...pac,
+                velocity: {
+                    x: 0,
+                    y: -5
+                }
+            }, 
+            object: wall
+        })) {
+                stopY();
+                break;
+            } else {
+                pac.velocity.y = -5;
+            }
+        }
     } else if (keys.ArrowDown.pressed && lastKey === 'ArrowDown') {
-        handleCollisionAndMovement('down');
+        for (const wall of walls) {
+            if (wallCollision({
+            player: {
+                ...pac,
+                velocity: {
+                    x: 0,
+                    y: 5
+                }
+            }, 
+            object: wall
+        })) {
+                stopY();
+                break;
+            } else {
+                pac.velocity.y = 5;
+            }
+        }
     } else if (keys.ArrowLeft.pressed && lastKey === 'ArrowLeft') {
-        handleCollisionAndMovement('left');
+        for (const wall of walls) {
+            if (wallCollision({
+            player: {
+                ...pac,
+                velocity: {
+                    x: -5,
+                    y: 0
+                }
+            }, 
+            object: wall
+        })) {
+                stopX();
+                break;
+            } else {
+                pac.velocity.x = -5;
+            }
+        }
     } else if (keys.ArrowRight.pressed && lastKey === 'ArrowRight') {
-        handleCollisionAndMovement('right');
+        for (const wall of walls) {
+            if (wallCollision({
+            player: {
+                ...pac,
+                velocity: {
+                    x: 5,
+                    y: 0
+                }
+            }, 
+            object: wall
+        })) {
+                stopX();
+                break;
+            } else {
+                pac.velocity.x = 5;
+            }
+        }
     }
 }
 
@@ -248,9 +226,9 @@ function animate() {
     requestAnimationFrame(animate);
     context.clearRect(0, 0, canvas.width, canvas.height); // clear canvas in between frames
     movePac();
-    pac.render(); 
     renderWalls(map);
     detectCollision();
+    pac.render();
 }
 
 animate();
