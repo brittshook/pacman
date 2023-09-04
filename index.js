@@ -8,10 +8,10 @@ canvas.height = innerHeight;
 const map = [
     ['-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-'],
     ['-', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '-'],
+    ['-', ' ', '-', '-', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '-'],
+    ['-', ' ', '-', '-', '-', ' ', ' ', '-', '-', ' ', ' ', '-'],
     ['-', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '-'],
-    ['-', ' ', ' ', '-', '-', ' ', ' ', '-', '-', ' ', ' ', '-'],
-    ['-', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '-'],
-    ['-', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '-'],
+    ['-', ' ', '-', '-', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '-'],
     ['-', ' ', ' ', '-', '-', ' ', ' ', '-', '-', ' ', ' ', '-'],
     ['-', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '-'],
     ['-', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '-'],
@@ -21,17 +21,15 @@ const map = [
 class Wall {
     static width = 40;
     static height = 40;
-    constructor({ position }) {
+    constructor({ position, image }) {
         this.position = position;
         this.width = Wall.width;
         this.height = Wall.height;
-        // this.image = image;
+        this.image = image;
     }
 
     draw() {
-        context.fillStyle = '#0004ff';
-        context.fillRect(this.position.x, this.position.y, this.width, this.height);
-        // context.drawImage(this.image, this.position.x, this.position.y);
+        context.drawImage(this.image, this.position.x, this.position.y);
     }
 }
 
@@ -40,13 +38,45 @@ const walls = [];
 function renderWalls(map) {
     map.forEach((row, y) => {
         row.forEach((symbol, x) => {
-            if (symbol === '-') {
-                const position = {
-                    x: Wall.width * x,
-                    y: Wall.height * y
-                };
-                walls.push(new Wall({ position }));
-            }
+            const position = {
+                x: Wall.width * x,
+                y: Wall.height * y
+            };
+            const image = new Image();
+
+            /*if (symbol === 'r') {
+                image.src = './img/rainbow-pellet.png';
+            } else if (symbol === '=') {
+                image.src = './img/double-horizontal.png';
+            } else if (symbol === '||') {
+                image.src = './img/double-vertical.png';
+            } else*/ if (symbol === '-') {
+                image.src = './img/single-horizontal.png';
+            } /* else if (symbol === '|') {
+                image.src = './img/single-vertical.png';
+            } else if (symbol === '1') {
+                image.src = './img/double-corner-TL.png';
+            } else if (symbol === '2') {
+                image.src = './img/double-corner-TR.png';
+            } else if (symbol === '3') {
+                image.src = './img/double-corner-BR.png';
+            } else if (symbol === '4') {
+                image.src = './img/double-corner-BL.png';
+            } else if (symbol === ']') {
+                image.src = './img/double-cap-L.png';
+            } else if (symbol === '[') {
+                image.src = './img/double-cap-R.png';
+            } else if (symbol === '.1') {
+                image.src = './img/single-corner-TL.png';
+            } else if (symbol === '.2') {
+                image.src = './img/single-corner-TR.png';
+            } else if (symbol === '.3') {
+                image.src = './img/single-corner-BR.png';
+            } else if (symbol === '.4') {
+                image.src = './img/single-corner-BL.png';
+            } */
+
+            walls.push(new Wall({ position, image }));
         });
     });
 
@@ -75,7 +105,7 @@ class Pac {
         this.position.y += this.velocity.y;
     }
 }
-console.log(Wall.height);
+
 const pac = new Pac({
     position: {
         x: 1.5 * Wall.width,
