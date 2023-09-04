@@ -77,9 +77,9 @@ function renderWalls(map) {
             const image = new Image();
 
             switch (symbol) {
-                case 'r':
+                /*case 'r':
                     image.src = './img/svg/rainbow-pellet.svg';
-                    break;
+                    break;*/ // disabling to resolve movement issue
                 case '-':
                     image.src = './img/svg/single-horizontal.svg';
                     break;
@@ -160,7 +160,7 @@ class Pac {
     constructor({position, velocity}) {
         this.position = position;
         this.velocity = velocity;
-        this.radius = 15;
+        this.radius = Wall.height / 2;
     }
 
     draw() {
@@ -189,6 +189,8 @@ const pac = new Pac({
     }
 });
 
+console.log(Wall.height);
+console.log(pac.radius);
 // EVENT LISTENERS
 
 let lastKey = '';
@@ -238,7 +240,7 @@ function wallCollision({ player, object }) {
     const velocityX = player.velocity.x;
     const velocityY = player.velocity.y;
 
-    return pacTop + velocityY <= wallBottom && pacBottom + velocityY >= wallTop && pacLeft + velocityX <= wallRight && pacRight + velocityX >= wallLeft;
+    return pacTop + velocityY < wallBottom && pacBottom + velocityY > wallTop && pacLeft + velocityX < wallRight && pacRight + velocityX > wallLeft;
 }
 
 const stopY = () => pac.velocity.y = 0;
@@ -330,7 +332,7 @@ function detectCollision() {
     }
 }
 
-// Put it all together... and wa la 
+// Put it all together
 function animate() {
     requestAnimationFrame(animate);
     context.clearRect(0, 0, canvas.width, canvas.height); // clear canvas in between frames
