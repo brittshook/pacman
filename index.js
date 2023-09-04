@@ -6,16 +6,36 @@ canvas.height = innerHeight;
 
 // Set up map + wall boundaries
 const map = [
-    ['-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-'],
-    ['-', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '-'],
-    ['-', ' ', '-', '-', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '-'],
-    ['-', ' ', '-', '-', '-', ' ', ' ', '-', '-', ' ', ' ', '-'],
-    ['-', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '-'],
-    ['-', ' ', '-', '-', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '-'],
-    ['-', ' ', ' ', '-', '-', ' ', ' ', '-', '-', ' ', ' ', '-'],
-    ['-', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '-'],
-    ['-', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '-'],
-    ['-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-'],
+    ['1', '=', '=', '=', '=', '=', '=', '=', '=', '=', '=', '=', '=', '^1', '^2', '=', '=', '=', '=', '=', '=', '=', '=', '=', '=', '=', '=', '2'],
+    ['||', 'r', 'r', 'r', 'r', 'r', 'r', 'r', 'r', 'r', 'r', 'r', 'r', '|', '|', 'r', 'r', 'r', 'r', 'r', 'r', 'r', 'r', 'r', 'r', 'r', 'r', '||'],
+    ['||', 'r', '-1', '-', '-', '-2', 'r', '-1', '-', '-', '-', '-2', 'r', '|', '|', 'r', '-1', '-', '-', '-', '-2', 'r', '-1', '-', '-', '-2', 'r', '||'],
+    ['||', 'r', '|', ' ', ' ', '|', 'r', '|', ' ', ' ', ' ', '|', 'r', '|', '|', 'r', '|', ' ', ' ', ' ', '|', 'r', '|', ' ', ' ', '|', 'r', '||'],
+    ['||', 'r', '-4', '-', '-', '-3', 'r', '-4', '-', '-', '-', '-3', 'r', '-4', '-3', 'r', '-4', '-', '-', '-', '-3', 'r', '-4', '-', '-', '-3', 'r', '||'],
+    ['||', 'r', 'r', 'r', 'r', 'r', 'r', 'r', 'r', 'r', 'r', 'r', 'r', 'r', 'r', 'r', 'r', 'r', 'r', 'r', 'r', 'r', 'r', 'r', 'r', 'r', 'r', '||'],
+    ['||', 'r', '-1', '-', '-', '-2', 'r', '-1', '-2', 'r', '-1', '-', '-', '-', '-', '-', '-', '-2', 'r', '-1', '-2', 'r', '-1', '-', '-', '-2', 'r', '||'],
+    ['||', 'r', '-4', '-', '-', '-3', 'r', '|', '|', 'r', '-4', '-', '-', '-2', '-1', '-', '-', '-3', 'r', '|', '|', 'r', '-4', '-', '-', '-3', 'r', '||'],
+    ['||', 'r', 'r', 'r', 'r', 'r', 'r', '|', '|', 'r', 'r', 'r', 'r', '|', '|', 'r', 'r', 'r', 'r', '|', '|', 'r', 'r', 'r', 'r', 'r', 'r', '||'],
+    ['4', '=', '=', '=', '=', '2', 'r', '|', '-4', '-', '-', '-2', 'r', '|', '|', 'r', '-1', '-', '-', '-3', '|', 'r', '1', '=', '=', '=', '=', '3'],
+    [' ', ' ', ' ', ' ', ' ', '||', 'r', '|', '-1', '-', '-', '-3', 'r', '-4', '-3', 'r', '-4', '-', '-', '-2', '|', 'r', '||', ' ', ' ', ' ', ' ', ' '],
+    [' ', ' ', ' ', ' ', ' ', '||', 'r', '|', '|', 'r', 'r', 'r', 'r', 'r', 'r', 'r', 'r', 'r', 'r', '|', '|', 'r', '||', ' ', ' ', ' ', ' ', ' '],
+    [' ', ' ', ' ', ' ', ' ', '||', 'r', '|', '|', 'r', '1', '=', ']', '-', '-', '[', '=', '2', 'r', '|', '|', 'r', '||', ' ', ' ', ' ', ' ', ' '],
+    ['=', '=', '=', '=', '=', '3', 'r', '-4', '-3', 'r', '||', ' ', ' ', ' ', ' ', ' ', ' ', '||', 'r', '-4', '-3', 'r', '4', '=', '=', '=', '=', '='],
+    ['r', 'r', 'r', 'r', 'r', 'r', 'r', 'r', 'r', 'r', '||', ' ', ' ', ' ', ' ', ' ', ' ', '||', 'r', 'r', 'r', 'r', 'r', 'r', 'r', 'r', 'r', 'r'],
+    ['=', '=', '=', '=', '=', '2', 'r', '-1', '-2', 'r', '4', '=', '=', '=', '=', '=', '=', '3', 'r', '-1', '-2', 'r', '1', '=', '=', '=', '=', '='],
+    [' ', ' ', ' ', ' ', ' ', '||', 'r', '|', '|', 'r', 'r', 'r', 'r', 'r', 'r', 'r', 'r', 'r', 'r', '|', '|', 'r', '||', ' ', ' ', ' ', ' ', ' '],
+    [' ', ' ', ' ', ' ', ' ', '||', 'r', '|', '|', 'r', '-1', '-', '-', '-', '-', '-', '-', '-2', 'r', '|', '|', 'r', '||', ' ', ' ', ' ', ' ', ' '],
+    ['1', '=', '=', '=', '=', '3', 'r', '-4', '-3', 'r', '-4', '-', '-', '-2', '-1', '-', '-', '-3', 'r', '-4', '-3', 'r', '4', '=', '=', '=', '=', '2'],
+    ['||', 'r', 'r', 'r', 'r', 'r', 'r', 'r', 'r', 'r', 'r', 'r', 'r', '|', '|', 'r', 'r', 'r', 'r', 'r', 'r', 'r', 'r', 'r', 'r', 'r', 'r', '||'],
+    ['||', 'r', '-1', '-', '-', '-2', 'r', '-1', '-', '-', '-', '-2', 'r', '|', '|', 'r', '-1', '-', '-', '-', '-2', 'r', '-1', '-', '-', '-2', 'r', '||'],
+    ['||', 'r', '-4', '-', '-2', '|', 'r', '-4', '-', '-', '-', '-3', 'r', '-4', '-3', 'r', '-4', '-', '-', '-', '-3', 'r', '|', '-1', '-', '-3', 'r', '||'],
+    ['||', 'r', 'r', 'r', '|', '|', 'r', 'r', 'r', 'r', 'r', 'r', 'r', 'r', 'r', 'r', 'r', 'r', 'r', 'r', 'r', 'r', '|', '|', 'r', 'r', 'r', '||'],
+    ['<1', '-', '-2', 'r', '|', '|', 'r', '-1', '-2', 'r', '-1', '-', '-', '-', '-', '-', '-', '-2', 'r', '-1', '-2', 'r', '|', '|', 'r', '-1', '-', '>1'],
+    ['<2', '-', '-3', 'r', '-4', '-3', 'r', '|', '|', 'r', '-4', '-', '-', '-2', '-1', '-', '-', '-3', 'r', '|', '|', 'r', '-4', '-3', 'r', '-4', '-', '>2'],
+    ['||', 'r', 'r', 'r', 'r', 'r', 'r', '|', '|', 'r', 'r', 'r', 'r', '|', '|', 'r', 'r', 'r', 'r', '|', '|', 'r', 'r', 'r', 'r', 'r', 'r', '||'],
+    ['||', 'r', '-1', '-', '-', '-', '-', '-3', '-4', '-', '-', '-2', 'r', '|', '|', 'r', '-1', '-', '-', '-3', '-4', '-', '-', '-', '-', '-2', 'r', '||'],
+    ['||', 'r', '-4', '-', '-', '-', '-', '-', '-', '-', '-', '-3', 'r', '|', '|', 'r', '-4', '-', '-', '-', '-', '-', '-', '-', '-', '-3', 'r', '||'],
+    ['||', 'r', 'r', 'r', 'r', 'r', 'r', 'r', 'r', 'r', 'r', 'r', 'r', '|', '|', 'r', 'r', 'r', 'r', 'r', 'r', 'r', 'r', 'r', 'r', 'r', 'r', '||'],
+    ['4', '=', '=', '=', '=', '=', '=', '=', '=', '=', '=', '=', '=', 'V1', 'V2', '=', '=', '=', '=', '=', '=', '=', '=', '=', '=', '=', '=', '3']
 ];
 
 class Wall {
@@ -44,38 +64,78 @@ function renderWalls(map) {
             };
             const image = new Image();
 
-            /*if (symbol === 'r') {
-                image.src = './img/rainbow-pellet.png';
-            } else if (symbol === '=') {
-                image.src = './img/double-horizontal.png';
-            } else if (symbol === '||') {
-                image.src = './img/double-vertical.png';
-            } else*/ if (symbol === '-') {
-                image.src = './img/single-horizontal.png';
-            } /* else if (symbol === '|') {
-                image.src = './img/single-vertical.png';
-            } else if (symbol === '1') {
-                image.src = './img/double-corner-TL.png';
-            } else if (symbol === '2') {
-                image.src = './img/double-corner-TR.png';
-            } else if (symbol === '3') {
-                image.src = './img/double-corner-BR.png';
-            } else if (symbol === '4') {
-                image.src = './img/double-corner-BL.png';
-            } else if (symbol === ']') {
-                image.src = './img/double-cap-L.png';
-            } else if (symbol === '[') {
-                image.src = './img/double-cap-R.png';
-            } else if (symbol === '.1') {
-                image.src = './img/single-corner-TL.png';
-            } else if (symbol === '.2') {
-                image.src = './img/single-corner-TR.png';
-            } else if (symbol === '.3') {
-                image.src = './img/single-corner-BR.png';
-            } else if (symbol === '.4') {
-                image.src = './img/single-corner-BL.png';
-            } */
-
+            switch (symbol) {
+                case 'r':
+                    image.src = './img/svg/rainbow-pellet.svg';
+                    break;
+                case '-':
+                    image.src = './img/svg/single-horizontal.svg';
+                    break;
+                case '=':
+                    image.src = './img/svg/double-horizontal.svg';
+                    break;
+                case '|':
+                    image.src = './img/svg/single-vertical.svg';
+                    break;
+                case '||':
+                    image.src = './img/svg/double-vertical.svg';
+                    break;
+                case '-1':
+                    image.src = './img/svg/single-corner-TL.svg';
+                    break;
+                case '-2':
+                    image.src = './img/svg/single-corner-TR.svg';
+                    break;
+                case '-3':
+                    image.src = './img/svg/single-corner-BR.svg';
+                    break;
+                case '-4':
+                    image.src = './img/svg/single-corner-BL.svg';
+                    break;
+                case '1':
+                    image.src = './img/svg/double-corner-TL.svg';
+                    break;
+                case '2':
+                    image.src = './img/svg/double-corner-TR.svg';
+                    break;
+                case '3':
+                    image.src = './img/svg/double-corner-BR.svg';
+                    break;
+                case '4':
+                    image.src = './img/svg/double-corner-BL.svg';
+                    break;
+                case ']':
+                    image.src = './img/svg/double-cap-L.svg';
+                    break;
+                case '[':
+                    image.src = './img/svg/double-cap-R.svg';
+                    break;
+                case '^1':
+                    image.src = './img/svg/double-horizontal-combo-TL.svg';
+                    break;
+                case '^2':
+                    image.src = './img/svg/double-horizontal-combo-TR.svg';
+                    break;
+                case 'V1':
+                    image.src = './img/svg/double-horizontal-combo-BL.svg';
+                    break;
+                case 'V2':
+                    image.src = './img/svg/double-horizontal-combo-BR.svg';
+                    break;
+                case '<1':
+                    image.src = './img/svg/double-vertical-combo-TL.svg';
+                    break;
+                case '<2':
+                    image.src = './img/svg/double-vertical-combo-BL.svg';
+                    break;
+                case '>1':
+                    image.src = './img/svg/double-vertical-combo-TR.svg';
+                    break;
+                case '>2':
+                    image.src = './img/svg/double-vertical-combo-BR.svg';
+                    break;
+            }
+            
             walls.push(new Wall({ position, image }));
         });
     });
