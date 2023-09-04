@@ -19,8 +19,8 @@ const map = [
 ];
 
 class Wall {
-    static width = 20;
-    static height = 20;
+    static width = 40;
+    static height = 40;
     constructor({ position }) {
         this.position = position;
         this.width = Wall.width;
@@ -78,8 +78,8 @@ class Pac {
 console.log(Wall.height);
 const pac = new Pac({
     position: {
-        x: 2 * Wall.width,
-        y: 2 * Wall.height
+        x: 1.5 * Wall.width,
+        y: 1.5 * Wall.height
     }, 
     velocity: {
         x: 0,
