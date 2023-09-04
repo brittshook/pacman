@@ -38,9 +38,21 @@ const map = [
     ['4', '=', '=', '=', '=', '=', '=', '=', '=', '=', '=', '=', '=', 'V1', 'V2', '=', '=', '=', '=', '=', '=', '=', '=', '=', '=', '=', '=', '3']
 ];
 
+const numRows = map.length;
+const rowHeightInVH = 1 / numRows;
+let wallHeight = (rowHeightInVH * window.innerHeight);
+
+if (wallHeight < 20) {
+    wallHeight = 20;
+} else if (wallHeight > 50) {
+    wallHeight = 50;
+}
+
+let wallWidth = wallHeight;
+
 class Wall {
-    static width = 40;
-    static height = 40;
+    static width = wallWidth;
+    static height = wallHeight;
     constructor({ position, image }) {
         this.position = position;
         this.width = Wall.width;
@@ -49,7 +61,7 @@ class Wall {
     }
 
     draw() {
-        context.drawImage(this.image, this.position.x, this.position.y);
+        context.drawImage(this.image, this.position.x, this.position.y, Wall.width, Wall.height);
     }
 }
 
