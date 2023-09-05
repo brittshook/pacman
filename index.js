@@ -61,64 +61,188 @@ class Wall {
     }
 
     draw() {
-        const x = this.position.x;
-        const y = this.position.y;
+        const x = this.position.x; // Starting x position (0)
+        const y = this.position.y; // Starting y position (0)
+
+        // Width variables
+        const oneThirdWidth = x + this.width / 3;
+        const halfWidth = x + this.width / 2;
+        const twoThirdWidth = x + (2 * this.width) / 3;
+        const fullWidth =  x + this.width;
+
+        // Height variables
+        const oneThirdHeight = y + this.height / 3;
+        const halfHeight =  y + this.height / 2;
+        const twoThirdHeight = y + (2 * this.height) / 3;
+        const fullHeight = y + this.height;
+
+        // Curve variables
+        const cornerRadiusOneThird = this.height / 3;
+        const cornerRadiusSixth = this.height / 6;
+        const cornerRadiusHalf = this.height / 2;
+        const cornerRadiusTwoThird = (2 * this.height) / 3;
+        const deg90 = Math.PI / 2;
+        const deg180 = Math.PI;
+        const deg270 = Math.PI * 1.5;
 
         context.beginPath();
-
+        
         switch (this.symbol) {
             case '-':
                 // Draw a horizontal line
-                context.moveTo(x, y + this.height / 2);
-                context.lineTo(x + this.width, y + this.height / 2);
+                context.moveTo(x, halfHeight);
+                context.lineTo(fullWidth, halfHeight);
                 break;
             case '=':
                 // Draw a double horizontal line
-                context.moveTo(x, y + this.height / 3);
-                context.lineTo(x + this.width, y + this.height / 3);
-                context.moveTo(x, y + (2 * this.height) / 3);
-                context.lineTo(x + this.width, y + (2 * this.height) / 3);
+                context.moveTo(x, oneThirdHeight);
+                context.lineTo(fullWidth, oneThirdHeight);
+                context.moveTo(x, twoThirdHeight);
+                context.lineTo(fullWidth, twoThirdHeight);
                 break;
             case '|':
                 // Draw a vertical line
-                context.moveTo(x + this.width / 2, y);
-                context.lineTo(x + this.width / 2, y + this.height);
+                context.moveTo(halfWidth, y);
+                context.lineTo(halfWidth, fullHeight);
                 break;
             case '||':
                 // Draw a double vertical line
-                context.moveTo(x + this.width / 3, y);
-                context.lineTo(x + this.width / 3, y + this.height);
-                context.moveTo(x + (2 * this.width) / 3, y);
-                context.lineTo(x + (2 * this.width) / 3, y + this.height);
+                context.moveTo(oneThirdWidth, y);
+                context.lineTo(oneThirdWidth, fullHeight);
+                context.moveTo(twoThirdWidth, y);
+                context.lineTo(twoThirdWidth, fullHeight);
                 break;
             case '-1':
-                // Draw a single line rounded corner (TL)
-                context.arc((x + this.width), (y + this.height), (this.width / 2), Math.PI, Math.PI * 1.5);
+                // Draw arc for TL corner
+                context.arc(fullWidth, fullHeight, cornerRadiusHalf, deg180, deg270);
                 break;
             case '-2':
-                context.arc(x, y + this.height, this.width / 2, Math.PI * 1.5, Math.PI * 2);
+                // Draw arc for TR corner
+                context.arc(x, fullHeight, cornerRadiusHalf, deg270, 0);
                 break;
             case '-3':
-                // Draw a single line rounded corner (BR)
-                context.arc(x, y, this.width / 2, 0, Math.PI / 2);
+                // Draw arc for BR corner
+                context.arc(x, y, cornerRadiusHalf, 0, deg90);
                 break;
             case '-4':
-                context.arc(x + this.width, y, this.width / 2, Math.PI / 2, Math.PI);
+                // Draw arc for BL corner
+                context.arc(fullWidth, y, cornerRadiusHalf, deg90, deg180);
                 break;
             case '1':
-                const centerX = x + this.width;
-                const centerY = y + this.height;
-                const radius = this.width / 2;
+                // Draw the outer arc for TL corner
+                context.arc(oneThirdWidth + cornerRadiusTwoThird, fullHeight, cornerRadiusTwoThird, deg180, deg270);
 
-                context.arc((x + this.width), (y + this.height), radius, Math.PI, Math.PI * 1.5);
+                // Draw the inner arc for TL corner
+                context.moveTo(twoThirdWidth, fullHeight);
+                context.arc(twoThirdWidth + cornerRadiusOneThird, fullHeight, cornerRadiusOneThird, deg180, deg270);
                 break;
-            /*case '2':
+            case '2':
+                // Draw the outer arc for TR corner
+                context.arc(twoThirdWidth - cornerRadiusTwoThird, fullHeight, cornerRadiusTwoThird, deg270, 0);
+
+                // Draw the inner arc for TR corner
+                context.moveTo(oneThirdWidth, fullHeight);
+                context.arc(oneThirdWidth - cornerRadiusOneThird, fullHeight, cornerRadiusOneThird, 0, deg270, true);
                 break;
             case '3':
+                // Draw the outer arc for BR corner
+                context.arc(twoThirdWidth - cornerRadiusTwoThird, y, cornerRadiusTwoThird, 0, deg90);
+
+                // Draw the inner arc for BR corner
+                context.moveTo(oneThirdWidth, y);
+                context.arc(oneThirdWidth - cornerRadiusOneThird, y, cornerRadiusOneThird, 0, deg90);
                 break;
             case '4':
-                break;*/
-            // Add cases for other wall types here
+                // Draw the outer arc for BL corner
+                context.arc(oneThirdWidth + cornerRadiusTwoThird, y, cornerRadiusTwoThird, deg90, deg180);
+
+                // Draw the inner arc for BL corner
+                context.moveTo(twoThirdWidth, y);
+                context.arc(twoThirdWidth + cornerRadiusOneThird, y, cornerRadiusOneThird, deg180, deg90, true);
+                break;
+            case ']':
+                // Draw the top straight line
+                context.moveTo(x, oneThirdHeight);
+                context.lineTo(fullWidth - cornerRadiusSixth, oneThirdHeight);
+
+                // Draw the curve path
+                context.quadraticCurveTo(fullWidth, oneThirdHeight, fullWidth, halfHeight);
+                context.quadraticCurveTo(fullWidth, twoThirdHeight, fullWidth - cornerRadiusSixth, twoThirdHeight);
+
+                // Draw the bottom straight line
+                context.lineTo(x, twoThirdHeight);
+                break;
+            case '[':
+                // Draw the top straight line
+                context.moveTo(fullWidth, oneThirdHeight);
+                context.lineTo(x + cornerRadiusSixth, oneThirdHeight);
+
+                // Draw the curve path (mirrored version)
+                context.quadraticCurveTo(x, oneThirdHeight, x, halfHeight);
+                context.quadraticCurveTo(x, twoThirdHeight, x + cornerRadiusSixth, twoThirdHeight);
+
+                // Draw the bottom straight line
+                context.lineTo(fullWidth, twoThirdHeight);
+                break;
+            case '^1':
+                context.moveTo(x, oneThirdHeight);
+                context.lineTo(fullWidth, oneThirdHeight);
+
+                context.moveTo(x, twoThirdHeight);
+                context.arc(x, twoThirdHeight + cornerRadiusHalf , cornerRadiusHalf, deg270, 0);
+                break;
+            case '^2':
+                context.moveTo(x, oneThirdHeight);
+                context.lineTo(fullWidth, oneThirdHeight);
+
+                context.moveTo(fullWidth, twoThirdHeight);
+                context.arc(fullWidth, twoThirdHeight + cornerRadiusHalf , cornerRadiusHalf, deg270, deg180, true);
+                break;
+           case 'V1':
+                context.moveTo(x, twoThirdHeight);
+                context.lineTo(fullWidth, twoThirdHeight);
+
+                context.moveTo(x, oneThirdHeight);
+                context.arc(x, oneThirdHeight - cornerRadiusHalf , cornerRadiusHalf, deg90, 0, true);
+                break;
+            case 'V2':
+                context.moveTo(x, twoThirdHeight);
+                context.lineTo(fullWidth, twoThirdHeight);
+
+
+                context.moveTo(fullWidth, oneThirdHeight);
+                context.arc(fullWidth, oneThirdHeight - cornerRadiusHalf , cornerRadiusHalf, deg90, deg180);
+                break;
+            case '<1':
+                context.moveTo(oneThirdWidth, y);
+                context.lineTo(oneThirdWidth, fullHeight);
+
+                context.moveTo(twoThirdWidth, y);
+                context.arc(twoThirdWidth + cornerRadiusHalf, y, cornerRadiusHalf, deg180, deg90, true);
+                break;
+            case '<2':
+                context.moveTo(oneThirdWidth, y);
+                context.lineTo(oneThirdWidth, fullHeight);
+
+                context.moveTo(twoThirdWidth, fullHeight);
+                context.arc(twoThirdWidth + cornerRadiusHalf, fullHeight, cornerRadiusHalf, deg180, deg270);
+                break;
+            case '>1':
+                context.moveTo(twoThirdWidth, y);
+                context.lineTo(twoThirdWidth, fullHeight);
+
+                context.moveTo(oneThirdWidth, y);
+                context.arc(oneThirdWidth - cornerRadiusHalf, y, cornerRadiusHalf, 0, deg90);
+                break;
+            case '>2':
+                context.moveTo(twoThirdWidth, y);
+                context.lineTo(twoThirdWidth, fullHeight);
+
+                context.moveTo(oneThirdWidth, fullHeight);
+                context.arc(oneThirdWidth - cornerRadiusHalf, fullHeight, cornerRadiusHalf, 0, deg270, true);
+                break;
+            default:
+                return;
         }
 
         context.strokeStyle = '#9747FF'; // Set the line color
@@ -146,114 +270,6 @@ function renderWalls(map) {
 
     walls.forEach(wall => wall.draw());
 }
-
-
-/*class Wall {
-    static width = wallWidth;
-    static height = wallHeight;
-    constructor({ position, image }) {
-        this.position = position;
-        this.width = Wall.width;
-        this.height = Wall.height;
-        this.image = image;
-    }
-
-    draw() {
-        context.drawImage(this.image, this.position.x, this.position.y, Wall.width, Wall.height);
-    }
-}
-
-const walls = [];
-
-function renderWalls(map) {
-    map.forEach((row, y) => {
-        row.forEach((symbol, x) => {
-            const position = {
-                x: Wall.width * x,
-                y: Wall.height * y
-            };
-            const image = new Image();
-
-            switch (symbol) {
-                /*case 'r':
-                    image.src = './img/svg/rainbow-pellet.svg';
-                    break; // disabling to resolve movement issue
-                case '-':
-                    image.src = './img/svg/single-horizontal.svg';
-                    break;
-                case '=':
-                    image.src = './img/svg/double-horizontal.svg';
-                    break;
-                case '|':
-                    image.src = './img/svg/single-vertical.svg';
-                    break;
-                case '||':
-                    image.src = './img/svg/double-vertical.svg';
-                    break;
-                case '-1':
-                    image.src = './img/svg/single-corner-TL.svg';
-                    break;
-                case '-2':
-                    image.src = './img/svg/single-corner-TR.svg';
-                    break;
-                case '-3':
-                    image.src = './img/svg/single-corner-BR.svg';
-                    break;
-                case '-4':
-                    image.src = './img/svg/single-corner-BL.svg';
-                    break;
-                case '1':
-                    image.src = './img/svg/double-corner-TL.svg';
-                    break;
-                case '2':
-                    image.src = './img/svg/double-corner-TR.svg';
-                    break;
-                case '3':
-                    image.src = './img/svg/double-corner-BR.svg';
-                    break;
-                case '4':
-                    image.src = './img/svg/double-corner-BL.svg';
-                    break;
-                case ']':
-                    image.src = './img/svg/double-cap-L.svg';
-                    break;
-                case '[':
-                    image.src = './img/svg/double-cap-R.svg';
-                    break;
-                case '^1':
-                    image.src = './img/svg/double-horizontal-combo-TL.svg';
-                    break;
-                case '^2':
-                    image.src = './img/svg/double-horizontal-combo-TR.svg';
-                    break;
-                case 'V1':
-                    image.src = './img/svg/double-horizontal-combo-BL.svg';
-                    break;
-                case 'V2':
-                    image.src = './img/svg/double-horizontal-combo-BR.svg';
-                    break;
-                case '<1':
-                    image.src = './img/svg/double-vertical-combo-TL.svg';
-                    break;
-                case '<2':
-                    image.src = './img/svg/double-vertical-combo-BL.svg';
-                    break;
-                case '>1':
-                    image.src = './img/svg/double-vertical-combo-TR.svg';
-                    break;
-                case '>2':
-                    image.src = './img/svg/double-vertical-combo-BR.svg';
-                    break;
-                default:
-                    return;
-            }
-            
-            walls.push(new Wall({ position, image }));
-        });
-    });
-
-    walls.forEach(wall => wall.draw());
-}*/
 
 // Create pac
 class Pac {
