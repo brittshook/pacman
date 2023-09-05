@@ -8,8 +8,8 @@ canvas.height = innerHeight;
 // Set up map + wall boundaries
 const map = [
     ['1', '=', '=', '=', '=', '=', '=', '=', '=', '=', '=', '=', '=', '^1', '^2', '=', '=', '=', '=', '=', '=', '=', '=', '=', '=', '=', '=', '2'],
-    ['||', ' ', ' ', ' ', ' ', 'r', 'r', 'r', 'r', 'r', 'r', 'r', 'r', '|', '|', 'r', 'r', 'r', 'r', 'r', 'r', 'r', 'r', 'r', 'r', 'r', 'r', '||'],
-    ['||', ' ', '-1', '-', '-', '-2', 'r', '-1', '-', '-', '-', '-2', 'r', '|', '|', 'r', '-1', '-', '-', '-', '-2', 'r', '-1', '-', '-', '-2', 'r', '||'],
+    ['||', ' ', 'r', 'r', 'r', 'r', 'r', 'r', 'r', 'r', 'r', 'r', 'r', '|', '|', 'r', 'r', 'r', 'r', 'r', 'r', 'r', 'r', 'r', 'r', 'r', 'r', '||'],
+    ['||', 'r', '-1', '-', '-', '-2', 'r', '-1', '-', '-', '-', '-2', 'r', '|', '|', 'r', '-1', '-', '-', '-', '-2', 'r', '-1', '-', '-', '-2', 'r', '||'],
     ['||', 'r', '|', ' ', ' ', '|', 'r', '|', ' ', ' ', ' ', '|', 'r', '|', '|', 'r', '|', ' ', ' ', ' ', '|', 'r', '|', ' ', ' ', '|', 'r', '||'],
     ['||', 'r', '-4', '-', '-', '-3', 'r', '-4', '-', '-', '-', '-3', 'r', '-4', '-3', 'r', '-4', '-', '-', '-', '-3', 'r', '-4', '-', '-', '-3', 'r', '||'],
     ['||', 'r', 'r', 'r', 'r', 'r', 'r', 'r', 'r', 'r', 'r', 'r', 'r', 'r', 'r', 'r', 'r', 'r', 'r', 'r', 'r', 'r', 'r', 'r', 'r', 'r', 'r', '||'],
@@ -282,7 +282,7 @@ class Pellet {
     constructor({ position }) {
         this.position = position;
         this.image = new Image();
-        this.image.scr = './img/svg/rainbow-pellet.svg';
+        this.image.src = './img/svg/rainbow-pellet.svg';
         this.width = Pellet.width;
         this.height =  Pellet.height
     }
@@ -296,6 +296,10 @@ const walls = [];
 const pellets = [];
 
 function renderMap(map) {
+
+    walls.length = 0;
+    pellets.length = 0;
+    
     map.forEach((row, y) => {
         row.forEach((symbol, x) => {
             if (symbol !== ' ' && symbol !== 'r') {
@@ -308,7 +312,7 @@ function renderMap(map) {
             } else if (symbol === 'r') {
                 const position = {
                     x: Wall.width * x + (Pellet.width / 2),
-                    y: Wall.height * y + (Pellet.height / 2)
+                    y: Wall.height * y + (Pellet.height * 1.25)
                 };
 
                 pellets.push(new Pellet({ position }));
@@ -393,81 +397,37 @@ addEventListener('keyup', ({ key }) => {
     }
 });
 
-// MOVEMENT FUNCTIONS - issue here
+// MOVEMENT FUNCTIONS
 
-// Detect wall collisions 
-function wallCollision({ player, object }) {
+// Detect wall or pellet collisions 
+function collision({ player, object }) {
     const pacTop = player.position.y - player.radius;
     const pacBottom = player.position.y + player.radius;
     const pacLeft = player.position.x - player.radius;
     const pacRight = player.position.x + player.radius;
 
-    const wallTop = object.position.y;
-    const wallBottom = object.position.y + object.height;
-    const wallLeft = object.position.x;
-    const wallRight = object.position.x + object.width;
+    const objectTop = object.position.y;
+    const objectBottom = object.position.y + object.height;
+    const objectLeft = object.position.x;
+    const objectRight = object.position.x + object.width;
 
-    const velocityX = player.velocity.x;
-    const velocityY = player.velocity.y;
+    if (object instanceof Wall) {
+        const velocityX = player.velocity.x;
+        const velocityY = player.velocity.y;
 
-    /*console.log('Pac top position is: ' + pacTop);
-    console.log('Wall bottom position is: ' + wallBottom);
-    console.log('Pac bottom position is: ' + pacBottom);
-    console.log('Wall top position is: ' + wallTop);
-    console.log('Pac left position is: ' + pacLeft);
-    console.log('Wall right position is: ' + wallRight);
-    console.log('Pac right position is: ' + pacRight);
-    console.log('Wall left position is: ' + wallLeft);
-    console.log('Pac X velocity is: ' + velocityX);
-    console.log('Pac Y velocity is: ' + velocityY);*/
-
-    return pacTop + velocityY < wallBottom && pacBottom + velocityY > wallTop && pacLeft + velocityX < wallRight && pacRight + velocityX > wallLeft;
+        return pacTop + velocityY < objectBottom && pacBottom + velocityY > objectTop && pacLeft + velocityX < objectRight && pacRight + velocityX > objectLeft;
+    } else if (object instanceof Pellet) {
+        return pacTop <= objectBottom && pacBottom >= objectTop && pacLeft <= objectRight && pacRight >= objectLeft;
+    }
 }
 
 const stopY = () => pac.velocity.y = 0;
 const stopX = () => pac.velocity.x = 0;
 
-/*function movePac() {
-    let velocityX = 0;
-    let velocityY = 0;
-
-    if (keys.ArrowUp.pressed && lastKey === 'ArrowUp') {
-        velocityY = -5;
-    } else if (keys.ArrowDown.pressed && lastKey === 'ArrowDown') {
-        velocityY = 5;
-    } else if (keys.ArrowLeft.pressed && lastKey === 'ArrowLeft') {
-        velocityX = -5;
-    } else if (keys.ArrowRight.pressed && lastKey === 'ArrowRight') {
-        velocityX = 5;
-    }
-
-    // Check collisions with walls
-    for (const wall of walls) {
-        if (wallCollision({
-            player: {
-                ...pac,
-                velocity: {
-                    x: velocityX,
-                    y: velocityY
-                }
-            },
-            object: wall
-        })) {
-            console.log('colliding');
-            velocityX = 0;
-            velocityY = 0;
-            break;
-        }
-    }
-
-    pac.velocity.x = velocityX;
-    pac.velocity.y = velocityY;
-}*/
-
 function movePac() {
     if (keys.ArrowUp.pressed && lastKey === 'ArrowUp') {
         for (const wall of walls) {
-            if (wallCollision({
+            if (collision({
             player: {
                 ...pac,
                 velocity: {
@@ -485,7 +445,7 @@ function movePac() {
         }
     } else if (keys.ArrowDown.pressed && lastKey === 'ArrowDown') {
         for (const wall of walls) {
-            if (wallCollision({
+            if (collision({
             player: {
                 ...pac,
                 velocity: {
@@ -503,7 +463,7 @@ function movePac() {
         }
     } else if (keys.ArrowLeft.pressed && lastKey === 'ArrowLeft') {
         for (const wall of walls) {
-            if (wallCollision({
+            if (collision({
             player: {
                 ...pac,
                 velocity: {
@@ -521,7 +481,7 @@ function movePac() {
         }
     } else if (keys.ArrowRight.pressed && lastKey === 'ArrowRight') {
         for (const wall of walls) {
-            if (wallCollision({
+            if (collision({
             player: {
                 ...pac,
                 velocity: {
@@ -541,13 +501,38 @@ function movePac() {
 }
 
 function detectCollision() {
-    for (const wall of walls) {
-        if (wallCollision({ player: pac, object: wall })) {
+    for (let i = 0; i < walls.length; i++) {
+        const wall = walls[i];
+
+        if (collision({ player: pac, object: wall })) {
             stopY();
             stopX();
             break;
         };
     }
+
+    const consumedPellets = [];
+
+    for (let i = 0; i < pellets.length; i++) {
+        const pellet = pellets[i];
+
+        if (collision({ player: pac, object: pellet })) {
+            consumedPellets.push(pellet);
+        }
+    }
+
+    // Remove consumed pellets
+    consumedPellets.forEach(consumedPellet => {
+        const { x, y } = consumedPellet.position;
+        const rowIndex = Math.floor(y / Wall.height);
+        const colIndex = Math.floor(x / Wall.width);
+
+        // Remove the pellet from the map
+        map[rowIndex][colIndex] = ' ';
+
+        // Remove the pellet from the pellets array
+        pellets.splice(pellets.indexOf(consumedPellet), 1);
+    });
 }
 
 // Put it all together
