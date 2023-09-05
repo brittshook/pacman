@@ -1,5 +1,6 @@
 const canvas = document.querySelector('canvas');
 const context = canvas.getContext('2d');
+context.imageSmoothingEnabled = true;
 
 canvas.width = innerWidth;
 canvas.height = innerHeight;
@@ -161,83 +162,98 @@ class Wall {
                 context.arc(twoThirdWidth + cornerRadiusOneThird, y, cornerRadiusOneThird, deg180, deg90, true);
                 break;
             case ']':
-                // Draw the top straight line
+                // Draw the top horizontal line
                 context.moveTo(x, oneThirdHeight);
                 context.lineTo(fullWidth - cornerRadiusSixth, oneThirdHeight);
 
-                // Draw the curve path
+                // Draw the curve
                 context.quadraticCurveTo(fullWidth, oneThirdHeight, fullWidth, halfHeight);
                 context.quadraticCurveTo(fullWidth, twoThirdHeight, fullWidth - cornerRadiusSixth, twoThirdHeight);
 
-                // Draw the bottom straight line
+                // Draw the bottom horizontal line
                 context.lineTo(x, twoThirdHeight);
                 break;
             case '[':
-                // Draw the top straight line
+                // Draw the top horizontal line
                 context.moveTo(fullWidth, oneThirdHeight);
                 context.lineTo(x + cornerRadiusSixth, oneThirdHeight);
 
-                // Draw the curve path (mirrored version)
+                // Draw the curve (mirrored version)
                 context.quadraticCurveTo(x, oneThirdHeight, x, halfHeight);
                 context.quadraticCurveTo(x, twoThirdHeight, x + cornerRadiusSixth, twoThirdHeight);
 
-                // Draw the bottom straight line
+                // Draw the bottom horizontal line
                 context.lineTo(fullWidth, twoThirdHeight);
                 break;
             case '^1':
+                // Draw the top horizontal line
                 context.moveTo(x, oneThirdHeight);
                 context.lineTo(fullWidth, oneThirdHeight);
 
+                // Draw the bottom arc (left)
                 context.moveTo(x, twoThirdHeight);
                 context.arc(x, twoThirdHeight + cornerRadiusHalf , cornerRadiusHalf, deg270, 0);
                 break;
             case '^2':
+                // Draw the top horizontal line
                 context.moveTo(x, oneThirdHeight);
                 context.lineTo(fullWidth, oneThirdHeight);
 
+                // Draw the bottom arc (right)
                 context.moveTo(fullWidth, twoThirdHeight);
                 context.arc(fullWidth, twoThirdHeight + cornerRadiusHalf , cornerRadiusHalf, deg270, deg180, true);
                 break;
            case 'V1':
+                // Draw the bottom horizontal line
                 context.moveTo(x, twoThirdHeight);
                 context.lineTo(fullWidth, twoThirdHeight);
 
+                // Draw the top arc (left)
                 context.moveTo(x, oneThirdHeight);
                 context.arc(x, oneThirdHeight - cornerRadiusHalf , cornerRadiusHalf, deg90, 0, true);
                 break;
             case 'V2':
+                // Draw the bottom horizontal line
                 context.moveTo(x, twoThirdHeight);
                 context.lineTo(fullWidth, twoThirdHeight);
 
-
+                // Draw the top arc (right)
                 context.moveTo(fullWidth, oneThirdHeight);
                 context.arc(fullWidth, oneThirdHeight - cornerRadiusHalf , cornerRadiusHalf, deg90, deg180);
                 break;
             case '<1':
+                // Draw the left vertical line
                 context.moveTo(oneThirdWidth, y);
                 context.lineTo(oneThirdWidth, fullHeight);
 
+                // Draw the right arc (top)
                 context.moveTo(twoThirdWidth, y);
                 context.arc(twoThirdWidth + cornerRadiusHalf, y, cornerRadiusHalf, deg180, deg90, true);
                 break;
             case '<2':
+                // Draw the left vertical line
                 context.moveTo(oneThirdWidth, y);
                 context.lineTo(oneThirdWidth, fullHeight);
 
+                // Draw the right arc (bottom)
                 context.moveTo(twoThirdWidth, fullHeight);
                 context.arc(twoThirdWidth + cornerRadiusHalf, fullHeight, cornerRadiusHalf, deg180, deg270);
                 break;
             case '>1':
+                // Draw the right vertical line
                 context.moveTo(twoThirdWidth, y);
                 context.lineTo(twoThirdWidth, fullHeight);
 
+                // Draw the left arc (top)
                 context.moveTo(oneThirdWidth, y);
                 context.arc(oneThirdWidth - cornerRadiusHalf, y, cornerRadiusHalf, 0, deg90);
                 break;
             case '>2':
+                // Draw the right vertical line
                 context.moveTo(twoThirdWidth, y);
                 context.lineTo(twoThirdWidth, fullHeight);
 
+                // Draw the left arc (bottom)
                 context.moveTo(oneThirdWidth, fullHeight);
                 context.arc(oneThirdWidth - cornerRadiusHalf, fullHeight, cornerRadiusHalf, 0, deg270, true);
                 break;
@@ -245,31 +261,65 @@ class Wall {
                 return;
         }
 
-        context.strokeStyle = '#9747FF'; // Set the line color
-        context.lineWidth = 4; // Set the line width
-        context.stroke(); // Draw the lines
+        context.strokeStyle = '#9747FF'; 
+
+        // Set line width
+        if (this.symbol === '1' || this.symbol === '-1' || this.symbol === '2' || this.symbol === '-2' || this.symbol === '3' || this.symbol === '-3' || this.symbol === '4' || this.symbol === '-4') {
+            context.lineWidth = 2.4; // Decrease thickness on corners
+        } else {
+            context.lineWidth = 2.5;
+        }
+
+        context.stroke();
         context.closePath();
     }
 }
 
-const walls = [];
+// Create pellets
+class Pellet {
+    static width = Math.ceil(Wall.width / 2);
+    static height = Math.ceil(this.width / 2);
+    constructor({ position }) {
+        this.position = position;
+        this.image = new Image();
+        this.image.scr = './img/svg/rainbow-pellet.svg';
+        this.width = Pellet.width;
+        this.height =  Pellet.height
+    }
 
-function renderWalls(map) {
+    draw() {
+        context.drawImage(this.image, this.position.x, this.position.y, this.width, this.height);
+    }
+}
+
+const walls = [];
+const pellets = [];
+
+function renderMap(map) {
     map.forEach((row, y) => {
         row.forEach((symbol, x) => {
-            if (symbol !== ' ') {
+            if (symbol !== ' ' && symbol !== 'r') {
                 const position = {
                     x: Wall.width * x,
                     y: Wall.height * y
                 };
 
                 walls.push(new Wall({ position, symbol }));
+            } else if (symbol === 'r') {
+                const position = {
+                    x: Wall.width * x + (Pellet.width / 2),
+                    y: Wall.height * y + (Pellet.height / 2)
+                };
+
+                pellets.push(new Pellet({ position }));
             }
         });
     });
 
     walls.forEach(wall => wall.draw());
+    pellets.forEach(pellet => pellet.draw());
 }
+console.log(pellets);
 
 // Create pac
 class Pac {
@@ -505,7 +555,7 @@ function animate() {
     requestAnimationFrame(animate);
     context.clearRect(0, 0, canvas.width, canvas.height); // clear canvas in between frames
     movePac();
-    renderWalls(map);
+    renderMap(map);
     detectCollision();
     pac.render();
 }
