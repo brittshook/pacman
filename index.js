@@ -7,8 +7,8 @@ canvas.height = innerHeight;
 // Set up map + wall boundaries
 const map = [
     ['1', '=', '=', '=', '=', '=', '=', '=', '=', '=', '=', '=', '=', '^1', '^2', '=', '=', '=', '=', '=', '=', '=', '=', '=', '=', '=', '=', '2'],
-    ['||', 'r', 'r', 'r', 'r', 'r', 'r', 'r', 'r', 'r', 'r', 'r', 'r', '|', '|', 'r', 'r', 'r', 'r', 'r', 'r', 'r', 'r', 'r', 'r', 'r', 'r', '||'],
-    ['||', 'r', '-1', '-', '-', '-2', 'r', '-1', '-', '-', '-', '-2', 'r', '|', '|', 'r', '-1', '-', '-', '-', '-2', 'r', '-1', '-', '-', '-2', 'r', '||'],
+    ['||', ' ', ' ', ' ', ' ', 'r', 'r', 'r', 'r', 'r', 'r', 'r', 'r', '|', '|', 'r', 'r', 'r', 'r', 'r', 'r', 'r', 'r', 'r', 'r', 'r', 'r', '||'],
+    ['||', ' ', '-1', '-', '-', '-2', 'r', '-1', '-', '-', '-', '-2', 'r', '|', '|', 'r', '-1', '-', '-', '-', '-2', 'r', '-1', '-', '-', '-2', 'r', '||'],
     ['||', 'r', '|', ' ', ' ', '|', 'r', '|', ' ', ' ', ' ', '|', 'r', '|', '|', 'r', '|', ' ', ' ', ' ', '|', 'r', '|', ' ', ' ', '|', 'r', '||'],
     ['||', 'r', '-4', '-', '-', '-3', 'r', '-4', '-', '-', '-', '-3', 'r', '-4', '-3', 'r', '-4', '-', '-', '-', '-3', 'r', '-4', '-', '-', '-3', 'r', '||'],
     ['||', 'r', 'r', 'r', 'r', 'r', 'r', 'r', 'r', 'r', 'r', 'r', 'r', 'r', 'r', 'r', 'r', 'r', 'r', 'r', 'r', 'r', 'r', 'r', 'r', 'r', 'r', '||'],
@@ -146,6 +146,8 @@ function renderWalls(map) {
                 case '>2':
                     image.src = './img/svg/double-vertical-combo-BR.svg';
                     break;
+                default:
+                    return;
             }
             
             walls.push(new Wall({ position, image }));
@@ -160,7 +162,7 @@ class Pac {
     constructor({position, velocity}) {
         this.position = position;
         this.velocity = velocity;
-        this.radius = Wall.height / 2;
+        this.radius = Math.floor(Wall.height / 2);
     }
 
     draw() {
@@ -189,8 +191,12 @@ const pac = new Pac({
     }
 });
 
-console.log(Wall.height);
-console.log(pac.radius);
+/*console.log('Wall height is: ' + Wall.height);
+console.log('Pac radius is: ' + pac.radius);
+console.log('Pac height is: ' + (pac.radius * 2));
+console.log('Pac X position is: ' + pac.position.x);
+console.log('Pac Y position is: ' + pac.position.y);*/
+
 // EVENT LISTENERS
 
 let lastKey = '';
@@ -240,11 +246,59 @@ function wallCollision({ player, object }) {
     const velocityX = player.velocity.x;
     const velocityY = player.velocity.y;
 
+    /*console.log('Pac top position is: ' + pacTop);
+    console.log('Wall bottom position is: ' + wallBottom);
+    console.log('Pac bottom position is: ' + pacBottom);
+    console.log('Wall top position is: ' + wallTop);
+    console.log('Pac left position is: ' + pacLeft);
+    console.log('Wall right position is: ' + wallRight);
+    console.log('Pac right position is: ' + pacRight);
+    console.log('Wall left position is: ' + wallLeft);
+    console.log('Pac X velocity is: ' + velocityX);
+    console.log('Pac Y velocity is: ' + velocityY);*/
+
     return pacTop + velocityY < wallBottom && pacBottom + velocityY > wallTop && pacLeft + velocityX < wallRight && pacRight + velocityX > wallLeft;
 }
 
 const stopY = () => pac.velocity.y = 0;
 const stopX = () => pac.velocity.x = 0;
+
+/*function movePac() {
+    let velocityX = 0;
+    let velocityY = 0;
+
+    if (keys.ArrowUp.pressed && lastKey === 'ArrowUp') {
+        velocityY = -5;
+    } else if (keys.ArrowDown.pressed && lastKey === 'ArrowDown') {
+        velocityY = 5;
+    } else if (keys.ArrowLeft.pressed && lastKey === 'ArrowLeft') {
+        velocityX = -5;
+    } else if (keys.ArrowRight.pressed && lastKey === 'ArrowRight') {
+        velocityX = 5;
+    }
+
+    // Check collisions with walls
+    for (const wall of walls) {
+        if (wallCollision({
+            player: {
+                ...pac,
+                velocity: {
+                    x: velocityX,
+                    y: velocityY
+                }
+            },
+            object: wall
+        })) {
+            console.log('colliding');
+            velocityX = 0;
+            velocityY = 0;
+            break;
+        }
+    }
+
+    pac.velocity.x = velocityX;
+    pac.velocity.y = velocityY;
+}*/
 
 function movePac() {
     if (keys.ArrowUp.pressed && lastKey === 'ArrowUp') {
