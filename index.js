@@ -40,7 +40,7 @@ const map = [
 
 const numRows = map.length;
 const rowHeightInVH = 1 / numRows;
-let wallHeight = (rowHeightInVH * window.innerHeight);
+let wallHeight = Math.floor(rowHeightInVH * window.innerHeight);
 
 if (wallHeight < 20) {
     wallHeight = 20;
@@ -51,6 +51,104 @@ if (wallHeight < 20) {
 let wallWidth = wallHeight;
 
 class Wall {
+    static width = wallWidth;
+    static height = wallHeight;
+    constructor({ position, symbol }) {
+        this.position = position;
+        this.width = Wall.width;
+        this.height = Wall.height;
+        this.symbol = symbol;
+    }
+
+    draw() {
+        const x = this.position.x;
+        const y = this.position.y;
+
+        context.beginPath();
+
+        switch (this.symbol) {
+            case '-':
+                // Draw a horizontal line
+                context.moveTo(x, y + this.height / 2);
+                context.lineTo(x + this.width, y + this.height / 2);
+                break;
+            case '=':
+                // Draw a double horizontal line
+                context.moveTo(x, y + this.height / 3);
+                context.lineTo(x + this.width, y + this.height / 3);
+                context.moveTo(x, y + (2 * this.height) / 3);
+                context.lineTo(x + this.width, y + (2 * this.height) / 3);
+                break;
+            case '|':
+                // Draw a vertical line
+                context.moveTo(x + this.width / 2, y);
+                context.lineTo(x + this.width / 2, y + this.height);
+                break;
+            case '||':
+                // Draw a double vertical line
+                context.moveTo(x + this.width / 3, y);
+                context.lineTo(x + this.width / 3, y + this.height);
+                context.moveTo(x + (2 * this.width) / 3, y);
+                context.lineTo(x + (2 * this.width) / 3, y + this.height);
+                break;
+            case '-1':
+                // Draw a single line rounded corner (TL)
+                context.arc((x + this.width), (y + this.height), (this.width / 2), Math.PI, Math.PI * 1.5);
+                break;
+            case '-2':
+                context.arc(x, y + this.height, this.width / 2, Math.PI * 1.5, Math.PI * 2);
+                break;
+            case '-3':
+                // Draw a single line rounded corner (BR)
+                context.arc(x, y, this.width / 2, 0, Math.PI / 2);
+                break;
+            case '-4':
+                context.arc(x + this.width, y, this.width / 2, Math.PI / 2, Math.PI);
+                break;
+            case '1':
+                const centerX = x + this.width;
+                const centerY = y + this.height;
+                const radius = this.width / 2;
+
+                context.arc((x + this.width), (y + this.height), radius, Math.PI, Math.PI * 1.5);
+                break;
+            /*case '2':
+                break;
+            case '3':
+                break;
+            case '4':
+                break;*/
+            // Add cases for other wall types here
+        }
+
+        context.strokeStyle = '#9747FF'; // Set the line color
+        context.lineWidth = 4; // Set the line width
+        context.stroke(); // Draw the lines
+        context.closePath();
+    }
+}
+
+const walls = [];
+
+function renderWalls(map) {
+    map.forEach((row, y) => {
+        row.forEach((symbol, x) => {
+            if (symbol !== ' ') {
+                const position = {
+                    x: Wall.width * x,
+                    y: Wall.height * y
+                };
+
+                walls.push(new Wall({ position, symbol }));
+            }
+        });
+    });
+
+    walls.forEach(wall => wall.draw());
+}
+
+
+/*class Wall {
     static width = wallWidth;
     static height = wallHeight;
     constructor({ position, image }) {
@@ -79,7 +177,7 @@ function renderWalls(map) {
             switch (symbol) {
                 /*case 'r':
                     image.src = './img/svg/rainbow-pellet.svg';
-                    break;*/ // disabling to resolve movement issue
+                    break; // disabling to resolve movement issue
                 case '-':
                     image.src = './img/svg/single-horizontal.svg';
                     break;
@@ -155,7 +253,7 @@ function renderWalls(map) {
     });
 
     walls.forEach(wall => wall.draw());
-}
+}*/
 
 // Create pac
 class Pac {
