@@ -2,7 +2,7 @@ import  { context } from './canvasSetup.js';
 import Wall from './wall.js';
 
 export default class Pellet {
-    static width = Math.ceil(Wall.width / 2);
+    static width = Math.ceil(Wall.width / 1.75);
     static height = Math.ceil(this.width / 2);
     constructor({ position }) {
         this.position = position;

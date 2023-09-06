@@ -37,18 +37,18 @@ function detectCollision() {
         };
     }
 
-    const consumedPellets = [];
+    let consumedPellet = null;
 
-    for (let i = 0; i < pellets.length; i++) { // should probably break oout of this loop after collision and ddoont even need a new arrray
+    for (let i = 0; i < pellets.length; i++) { // should probably break out of this loop after collision and ddoont even need a new arrray
         const pellet = pellets[i];
 
         if (collision({ player: pac, object: pellet })) {
-            consumedPellets.push(pellet);
+            consumedPellet = pellet;
+            break;
         }
     }
 
-    // Remove consumed pellets
-    consumedPellets.forEach(consumedPellet => {
+    if (consumedPellet) {
         const { x, y } = consumedPellet.position;
         const rowIndex = Math.floor(y / Wall.height);
         const colIndex = Math.floor(x / Wall.width);
@@ -58,7 +58,7 @@ function detectCollision() {
 
         // Remove the pellet from the pellets array
         pellets.splice(pellets.indexOf(consumedPellet), 1);
-    });
+    }
 }
 
 export { collision, detectCollision, stopX, stopY };
