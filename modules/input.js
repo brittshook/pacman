@@ -1,5 +1,5 @@
 let lastKey = '';
-
+// issue with movement L R sometimes
 const keys = {
     ArrowUp: {
         pressed: false
