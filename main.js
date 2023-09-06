@@ -1,11 +1,14 @@
+import animate from "./modules/animate.js";
+
+/* canvasSetup.js
 const canvas = document.querySelector('canvas');
 const context = canvas.getContext('2d');
 context.imageSmoothingEnabled = true;
 
 canvas.width = innerWidth;
-canvas.height = innerHeight;
+canvas.height = innerHeight;*/
 
-// Set up map + wall boundaries
+/* map.js
 const map = [
     ['1', '=', '=', '=', '=', '=', '=', '=', '=', '=', '=', '=', '=', '^1', '^2', '=', '=', '=', '=', '=', '=', '=', '=', '=', '=', '=', '=', '2'],
     ['||', ' ', 'r', 'r', 'r', 'r', 'r', 'r', 'r', 'r', 'r', 'r', 'r', '|', '|', 'r', 'r', 'r', 'r', 'r', 'r', 'r', 'r', 'r', 'r', 'r', 'r', '||'],
@@ -37,8 +40,9 @@ const map = [
     ['||', 'r', '-4', '-', '-', '-', '-', '-', '-', '-', '-', '-3', 'r', '|', '|', 'r', '-4', '-', '-', '-', '-', '-', '-', '-', '-', '-3', 'r', '||'],
     ['||', 'r', 'r', 'r', 'r', 'r', 'r', 'r', 'r', 'r', 'r', 'r', 'r', '|', '|', 'r', 'r', 'r', 'r', 'r', 'r', 'r', 'r', 'r', 'r', 'r', 'r', '||'],
     ['4', '=', '=', '=', '=', '=', '=', '=', '=', '=', '=', '=', '=', 'V1', 'V2', '=', '=', '=', '=', '=', '=', '=', '=', '=', '=', '=', '=', '3']
-];
+]; */
 
+/* mapFunctions.js
 const numRows = map.length;
 const rowHeightInVH = 1 / numRows;
 let wallHeight = Math.floor(rowHeightInVH * window.innerHeight);
@@ -49,8 +53,9 @@ if (wallHeight < 20) {
     wallHeight = 50;
 }
 
-let wallWidth = wallHeight;
+let wallWidth = wallHeight;*/
 
+/* wall.js
 class Wall {
     static width = wallWidth;
     static height = wallHeight;
@@ -273,10 +278,10 @@ class Wall {
         context.stroke();
         context.closePath();
     }
-}
+} */
 
-// Create pellets
-class Pellet {
+/* pellet.js
+ class Pellet {
     static width = Math.ceil(Wall.width / 2);
     static height = Math.ceil(this.width / 2);
     constructor({ position }) {
@@ -290,8 +295,9 @@ class Pellet {
     draw() {
         context.drawImage(this.image, this.position.x, this.position.y, this.width, this.height);
     }
-}
+} */
 
+/* render.js
 const walls = [];
 const pellets = [];
 
@@ -322,10 +328,9 @@ function renderMap(map) {
 
     walls.forEach(wall => wall.draw());
     pellets.forEach(pellet => pellet.draw());
-}
-console.log(pellets);
+} */
 
-// Create pac
+/* pac.js
 class Pac {
     constructor({position, velocity}) {
         this.position = position;
@@ -347,7 +352,8 @@ class Pac {
         this.position.y += this.velocity.y;
     }
 }
-
+*/
+/* players.js
 const pac = new Pac({
     position: {
         x: 1.5 * Wall.width,
@@ -358,14 +364,10 @@ const pac = new Pac({
         y: 0
     }
 });
+*/
 
-/*console.log('Wall height is: ' + Wall.height);
-console.log('Pac radius is: ' + pac.radius);
-console.log('Pac height is: ' + (pac.radius * 2));
-console.log('Pac X position is: ' + pac.position.x);
-console.log('Pac Y position is: ' + pac.position.y);*/
 
-// EVENT LISTENERS
+/* input.js
 
 let lastKey = '';
 
@@ -396,8 +398,9 @@ addEventListener('keyup', ({ key }) => {
         keys[key]['pressed'] = false;
     }
 });
+*/
 
-// MOVEMENT FUNCTIONS
+/* collision.js
 
 // Detect wall or pellet collisions 
 function collision({ player, object }) {
@@ -420,9 +423,10 @@ function collision({ player, object }) {
         return pacTop <= objectBottom && pacBottom >= objectTop && pacLeft <= objectRight && pacRight >= objectLeft;
     }
 }
-
+*/
+/* movement.js
 const stopY = () => pac.velocity.y = 0;
-const stopX = () => pac.velocity.x = 0;
+const stopX = () => pac.velocity.x = 0; 
 
 function movePac() {
     if (keys.ArrowUp.pressed && lastKey === 'ArrowUp') {
@@ -499,7 +503,9 @@ function movePac() {
         }
     }
 }
+*/
 
+/*  collision.js 
 function detectCollision() {
     for (let i = 0; i < walls.length; i++) {
         const wall = walls[i];
@@ -533,9 +539,9 @@ function detectCollision() {
         // Remove the pellet from the pellets array
         pellets.splice(pellets.indexOf(consumedPellet), 1);
     });
-}
+}*/
 
-// Put it all together
+/* animate.js
 function animate() {
     requestAnimationFrame(animate);
     context.clearRect(0, 0, canvas.width, canvas.height); // clear canvas in between frames
@@ -543,6 +549,6 @@ function animate() {
     renderMap(map);
     detectCollision();
     pac.render();
-}
+} */
 
 animate();
