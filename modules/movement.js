@@ -3,80 +3,46 @@ import { collision } from './collision.js';
 import { pac } from './players.js';
 import { walls } from './render.js';
 
+// Stop movement functions
 const stopX = () => pac.velocity.x = 0;
 const stopY = () => pac.velocity.y = 0;
 
 function movePac() {
-    if (keys.ArrowUp.pressed && lastKey === 'ArrowUp') {
+    // Map keys to velocity changes
+    const velocityMapping = {
+        ArrowUp: { x: 0, y: -5 },
+        ArrowDown: { x: 0, y: 5 },
+        ArrowLeft: { x: -5, y: 0 },
+        ArrowRight: { x: 5, y: 0 }
+    };
+
+    const direction = keys[lastKey]?.pressed ? lastKey : null;
+    
+    if (direction && velocityMapping[direction]) {
+        const { x, y } = velocityMapping[direction];
+
         for (const wall of walls) {
             if (collision({
-            player: {
-                ...pac,
-                velocity: {
-                    x: 0,
-                    y: -5
+                player: {
+                    ...pac,
+                    velocity: { x, y }
+                },
+                object: wall
+            })) {
+                if (x !== 0) {
+                    console.log('Going to collide along X');
+                    console.log('My x position is' + pac.position.x);
+                    stopX();
                 }
-            }, 
-            object: wall
-        })) {
-                stopY();
+                if (y !== 0) {
+                    console.log('Going to collide along Y');
+                    console.log('My y position is' + pac.position.y);
+                    stopY();
+                }
                 break;
             } else {
-                pac.velocity.y = -5;
-            }
-        }
-    } else if (keys.ArrowDown.pressed && lastKey === 'ArrowDown') {
-        for (const wall of walls) {
-            if (collision({
-            player: {
-                ...pac,
-                velocity: {
-                    x: 0,
-                    y: 5
-                }
-            }, 
-            object: wall
-        })) {
-                stopY();
-                break;
-            } else {
-                pac.velocity.y = 5;
-            }
-        }
-    } else if (keys.ArrowLeft.pressed && lastKey === 'ArrowLeft') {
-        for (const wall of walls) {
-            if (collision({
-            player: {
-                ...pac,
-                velocity: {
-                    x: -5,
-                    y: 0
-                }
-            }, 
-            object: wall
-        })) {
-                stopX();
-                break;
-            } else {
-                pac.velocity.x = -5;
-            }
-        }
-    } else if (keys.ArrowRight.pressed && lastKey === 'ArrowRight') {
-        for (const wall of walls) {
-            if (collision({
-            player: {
-                ...pac,
-                velocity: {
-                    x: 5,
-                    y: 0
-                }
-            }, 
-            object: wall
-        })) {
-                stopX();
-                break;
-            } else {
-                pac.velocity.x = 5;
+                if (x !== 0) pac.velocity.x = x;
+                if (y !== 0) pac.velocity.y = y;
             }
         }
     }

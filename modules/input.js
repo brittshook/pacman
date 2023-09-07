@@ -1,5 +1,5 @@
 let lastKey = '';
-// issue with movement L R sometimes
+
 const keys = {
     ArrowUp: {
         pressed: false
@@ -14,8 +14,6 @@ const keys = {
         pressed: false
     }
 }
-
-console.log(lastKey);
 
 addEventListener('keydown', ({key}) => {
     if (key in keys) {

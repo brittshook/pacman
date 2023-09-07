@@ -1,9 +1,10 @@
 import Wall from './wall.js';
 import Pellet from './pellet.js';
 import { walls , pellets } from './render.js';
-import map from './map.js';
 import { pac } from './players.js';
 import { stopX, stopY } from './movement.js';
+
+// getting stuck at crossroads, collision or movement issue
 
 function collision({ player, object }) {
     const pacTop = player.position.y - player.radius;
@@ -30,19 +31,26 @@ function detectCollision() {
     for (let i = 0; i < walls.length; i++) {
         const wall = walls[i];
 
-        if (collision({ player: pac, object: wall })) {
+        if (collision({
+            player: pac, 
+            object: wall 
+        })) {
+            console.log('we collided and are now stopped');
+            console.log('My x coordinate ' + (pac.position.x) + ' My y coordinate ' + (pac.position.y));
+
             stopY();
             stopX();
             break;
         };
     }
 
-    let consumedPellet = null;
-
     for (let i = 0; i < pellets.length; i++) {
         const pellet = pellets[i];
 
-        if (collision({ player: pac, object: pellet })) {
+        if (collision({
+            player: pac,
+            object: pellet 
+        })) {
             pellets.splice(i, 1);
         }
     }

@@ -3,19 +3,24 @@ import { detectCollision } from './collision.js';
 import { movePac } from './movement.js';
 import { renderMap, renderPellets } from './render.js';
 import { pac } from './players.js';
+//import { lastKey } from './input.js';
+
+const { width, height } = canvas;
 
 export default function animate() {
     // Clear canvas
-    context.clearRect(0, 0, canvas.width, canvas.height); 
+    context.clearRect(0, 0, width, height); 
 
     // Update game logic
-    detectCollision();
     movePac();
+    detectCollision();
 
     // Render game elements
-    pac.render();
     renderMap();
+    pac.render();
     renderPellets();
+
+    //console.log(lastKey);
 
     requestAnimationFrame(animate);
 }
