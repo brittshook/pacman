@@ -5,7 +5,7 @@ export default class Pac {
     constructor({position, velocity}) {
         this.position = position;
         this.velocity = velocity;
-        this.radius = Wall.height / 2;
+        this.radius = Math.floor(Wall.height / 2);
     }
 
     draw() {

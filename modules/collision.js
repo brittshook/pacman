@@ -4,8 +4,6 @@ import { walls , pellets } from './render.js';
 import { pac } from './players.js';
 import { stopX, stopY } from './movement.js';
 
-// getting stuck at crossroads, collision or movement issue
-
 function collision({ player, object }) {
     const pacTop = player.position.y - player.radius;
     const pacBottom = player.position.y + player.radius;
@@ -35,9 +33,6 @@ function detectCollision() {
             player: pac, 
             object: wall 
         })) {
-            console.log('we collided and are now stopped');
-            console.log('My x coordinate ' + (pac.position.x) + ' My y coordinate ' + (pac.position.y));
-
             stopY();
             stopX();
             break;

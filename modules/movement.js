@@ -30,13 +30,9 @@ function movePac() {
                 object: wall
             })) {
                 if (x !== 0) {
-                    console.log('Going to collide along X');
-                    console.log('My x position is' + pac.position.x);
                     stopX();
                 }
                 if (y !== 0) {
-                    console.log('Going to collide along Y');
-                    console.log('My y position is' + pac.position.y);
                     stopY();
                 }
                 break;

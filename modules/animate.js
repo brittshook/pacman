@@ -3,7 +3,6 @@ import { detectCollision } from './collision.js';
 import { movePac } from './movement.js';
 import { renderMap, renderPellets } from './render.js';
 import { pac } from './players.js';
-//import { lastKey } from './input.js';
 
 const { width, height } = canvas;
 
@@ -19,8 +18,6 @@ export default function animate() {
     renderMap();
     pac.render();
     renderPellets();
-
-    //console.log(lastKey);
 
     requestAnimationFrame(animate);
 }
