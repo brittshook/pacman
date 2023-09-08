@@ -1,9 +1,5 @@
 import { context } from './canvasSetup.js';
-
-// Math variables
-const deg90 = Math.PI / 2;
-const deg180 = Math.PI;
-const deg270 = Math.PI * 1.5;
+import { deg90, deg180, deg270 } from './math.js';
 
 // Drawing variables
 function initializeDrawingParameters(position, width, height) {
@@ -28,15 +24,17 @@ function initializeDrawingParameters(position, width, height) {
   return { x, y, oneThirdWidth, halfWidth, twoThirdWidth, fullWidth, oneThirdHeight, halfHeight, twoThirdHeight, fullHeight, cornerRadiusOneThird, cornerRadiusSixth, cornerRadiusHalf, cornerRadiusTwoThird };
 }
 
-function setDrawingStyles(wallType = null) {
+function setDrawingStyles(type = null, color = '#9747FF', scalingFactor = null) {
     // Line color
-    context.strokeStyle = '#9747FF'; 
+    context.strokeStyle = color; // Default color is purple for walls
 
     // Line width
-    if (wallType === 'corner') {
+    if (type === 'corner') {
         context.lineWidth = 2.4; // Decrease thickness on corners
+    } else if (type === 'thin line') {
+      context.lineWidth = 1 * scalingFactor; // For use on pellets
     } else {
-        context.lineWidth = 2.5;
+        context.lineWidth = 2.5; // Default thickness for wall lines
     }
 }
 
@@ -551,4 +549,4 @@ function drawComboVerticalBR(position, width, height) {
     context.closePath();
 };
 
-export { symbolToDrawFunction };
+export { symbolToDrawFunction, setDrawingStyles };

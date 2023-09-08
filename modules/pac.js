@@ -1,4 +1,4 @@
-import  { context } from './canvasSetup.js';
+import { context } from './canvasSetup.js';
 import Wall from './wall.js';
 
 export default class Pac {
