@@ -7,9 +7,20 @@
                 padding: 0;
                 background-color: #070412;
             }
+
+            #game-header {
+                margin: 15px 15px;
+            }
+
+            #score {
+                color: white;
+            }
         </style>
     </head>
     <body>
+        <div id="game-header">
+            <p id="score">SCORE: <span id="score-value">0</span></p>
+        </div>
         <canvas></canvas>
         <script type="module" src="main.js"></script>
         <script type="module" src="modules/animate.js"></script>

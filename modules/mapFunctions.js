@@ -3,6 +3,7 @@ import map from './map.js';
 
 const numRows = map.length;
 const rowHeightInVH = 1 / numRows; 
+
 // Calculate the height of each row in pixels
 let wallHeight = Math.floor(rowHeightInVH * canvas.height);
 

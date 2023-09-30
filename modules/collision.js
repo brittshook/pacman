@@ -25,6 +25,9 @@ function collision({ player, object }) {
     }
 }
 
+let score = document.querySelector('#score-value');
+let scoreNum = Number(score.innerText);
+
 function detectCollision() {
     for (let i = 0; i < walls.length; i++) {
         const wall = walls[i];
@@ -47,6 +50,8 @@ function detectCollision() {
             object: pellet 
         })) {
             pellets.splice(i, 1);
+            scoreNum += 1;
+            score.innerText = String(scoreNum);
         }
     }
 }
